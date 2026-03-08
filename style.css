@@ -1058,6 +1058,23 @@ button {
   animation: scorePop 900ms ease forwards;
 }
 
+.boot-error {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 40;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background:
+    linear-gradient(120deg, rgba(255, 108, 179, 0.18), rgba(255, 217, 119, 0.16)),
+    rgba(10, 16, 37, 0.92);
+  color: #fff4f8;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(12px);
+}
+
 .seat-tag {
   position: absolute;
   width: 84px;

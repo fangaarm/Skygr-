@@ -38,6 +38,10 @@
       "./assets/models/pixel.glb",
       "./assets/models/goldie.glb",
     ],
+    threeScripts: [
+      "https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js",
+      "https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/GLTFLoader.js",
+    ],
     tutorialSteps: [
       "Clique sur deux cartes de ton tableau pour lancer la manche.",
       "À ton tour, prends la défausse si elle t’aide, sinon pioche.",
@@ -547,6 +551,7 @@
     }
 
     async init() {
+      await ensureThreeAvailable();
       if (!window.THREE) {
         this.buildDomFallback();
         return;
@@ -1698,6 +1703,62 @@
     return { ...card, faceUp: true };
   }
 
+  async function ensureThreeAvailable() {
+    if (window.THREE) {
+      return;
+    }
+    try {
+      await loadScriptOnce(CONFIG.threeScripts[0], "three-core");
+      await loadScriptOnce(CONFIG.threeScripts[1], "three-gltf-loader");
+    } catch (error) {
+      console.warn("Three.js indisponible, fallback avatar activé.", error);
+    }
+  }
+
+  function loadScriptOnce(src, key) {
+    const existing = document.querySelector(`script[data-loader-key="${key}"]`);
+    if (existing) {
+      if (existing.dataset.loaded === "true") {
+        return Promise.resolve();
+      }
+      return new Promise((resolve, reject) => {
+        existing.addEventListener("load", () => resolve(), { once: true });
+        existing.addEventListener("error", () => reject(new Error(`Failed to load ${src}`)), {
+          once: true,
+        });
+      });
+    }
+
+    return new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      const timeoutId = window.setTimeout(() => {
+        reject(new Error(`Timeout while loading ${src}`));
+      }, 4500);
+      script.src = src;
+      script.async = true;
+      script.defer = true;
+      script.dataset.loaderKey = key;
+      script.addEventListener(
+        "load",
+        () => {
+          window.clearTimeout(timeoutId);
+          script.dataset.loaded = "true";
+          resolve();
+        },
+        { once: true }
+      );
+      script.addEventListener(
+        "error",
+        () => {
+          window.clearTimeout(timeoutId);
+          reject(new Error(`Failed to load ${src}`));
+        },
+        { once: true }
+      );
+      document.head.appendChild(script);
+    });
+  }
+
   function wait(ms) {
     return new Promise((resolve) => {
       window.setTimeout(resolve, ms);
@@ -1721,5 +1782,16 @@
     return 1 - Math.pow(1 - value, 3);
   }
 
-  window.addEventListener("DOMContentLoaded", initialize);
+  function showBootError(error) {
+    console.error("Skygro bootstrap error:", error);
+    const banner = document.createElement("div");
+    banner.className = "boot-error";
+    banner.textContent =
+      "Le script du jeu n'a pas démarré correctement. Recharge la page ou vide le cache du navigateur.";
+    document.body.appendChild(banner);
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    initialize().catch(showBootError);
+  });
 })();
