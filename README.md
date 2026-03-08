@@ -22,21 +22,6 @@ Tu peux le publier tel quel sur :
 - `manifest.webmanifest`
 - dossier `assets/`
 
-## Démarrage rapide
-
-### GitHub Pages
-
-1. Pousse le dépôt sur GitHub.
-2. Va dans `Settings > Pages`.
-3. Choisis la branche `main` et le dossier racine.
-4. Le site sera accessible via une URL publique.
-
-### Netlify / Vercel
-
-1. Importe le dépôt.
-2. Configure un projet statique sans build command.
-3. Définis le dossier de publication sur la racine du projet.
-
 ## Notes
 
 - Le layout est responsive desktop + mobile paysage.
