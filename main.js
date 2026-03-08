@@ -1463,9 +1463,14 @@
     APP.elements.statusBanner.textContent = round.statusText;
     APP.elements.drawCount.textContent = `${round.deck.length} cartes`;
     APP.elements.discardHint.textContent = round.discardPile.length ? "Disponible" : "Vide";
-    APP.elements.discardTop.textContent = round.discardPile.length
-      ? formatCardValue(APP.engine.getTopDiscard().value)
-      : "--";
+    if (round.discardPile.length) {
+      const discardCard = APP.engine.getTopDiscard();
+      APP.elements.discardTop.textContent = formatCardValue(discardCard.value);
+      APP.elements.discardTop.dataset.tone = cardTone(discardCard.value);
+    } else {
+      APP.elements.discardTop.textContent = "--";
+      delete APP.elements.discardTop.dataset.tone;
+    }
     APP.elements.drawPile.classList.toggle(
       "active-pile",
       round.phase === "await-draw" && currentPlayer.human
@@ -1494,7 +1499,7 @@
     } else {
       const placeholder = document.createElement("div");
       placeholder.className = "drawn-placeholder";
-      placeholder.textContent = "Carte en main";
+      placeholder.textContent = "En main";
       APP.elements.drawnCardSlot.appendChild(placeholder);
     }
     APP.elements.discardDrawnBtn.disabled =
@@ -1578,10 +1583,7 @@
           face.innerHTML = '<span class="card-value">VOID</span>';
         } else {
           face.dataset.tone = cardTone(card.value);
-          face.innerHTML = `
-            <span class="card-corners" data-value="${formatCardValue(card.value)}"></span>
-            <span class="card-value">${formatCardValue(card.value)}</span>
-          `;
+          face.innerHTML = `<span class="card-value">${formatCardValue(card.value)}</span>`;
         }
 
         shell.appendChild(face);
