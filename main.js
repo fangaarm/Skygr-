@@ -1537,7 +1537,7 @@
 
   function renderHistory() {
     APP.elements.historyList.innerHTML = "";
-    APP.engine.round.history.forEach((entry) => {
+    APP.engine.round.history.slice(0, 4).forEach((entry) => {
       const item = document.createElement("li");
       item.textContent = entry;
       APP.elements.historyList.appendChild(item);

@@ -510,6 +510,52 @@ button {
   box-shadow: var(--shadow-soft), 0 0 28px rgba(255, 217, 119, 0.18);
 }
 
+.history-tooltip {
+  position: absolute;
+  top: 52px;
+  right: 12px;
+  z-index: 3;
+  width: min(320px, calc(100% - 24px));
+  max-height: 164px;
+  padding: 12px;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent 36%),
+    rgba(10, 16, 34, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 16px 34px rgba(3, 8, 20, 0.34);
+  backdrop-filter: blur(12px);
+  pointer-events: none;
+}
+
+.history-tooltip .history-head {
+  gap: 10px;
+}
+
+.history-tooltip .history-head h3 {
+  font-size: 0.9rem;
+}
+
+.history-tooltip .history-badge {
+  padding: 5px 9px;
+  font-size: 0.68rem;
+}
+
+.history-tooltip .history-list {
+  margin-top: 10px;
+  max-height: 96px;
+  overflow: hidden;
+}
+
+.history-tooltip .history-list li {
+  padding: 7px 9px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(240, 246, 255, 0.88);
+  font-size: 0.76rem;
+  line-height: 1.28;
+}
+
 .seat-top,
 .seat-left,
 .seat-right {
@@ -1399,6 +1445,27 @@ button {
     min-height: 220px;
   }
 
+  .history-tooltip {
+    top: 46px;
+    right: 10px;
+    width: min(240px, calc(100% - 20px));
+    max-height: 138px;
+    padding: 10px;
+  }
+
+  .history-tooltip .history-head h3 {
+    font-size: 0.82rem;
+  }
+
+  .history-tooltip .history-list {
+    max-height: 78px;
+  }
+
+  .history-tooltip .history-list li {
+    font-size: 0.71rem;
+    padding: 6px 8px;
+  }
+
   .pile-card,
   .drawn-card-slot {
     min-height: 148px;
@@ -1439,5 +1506,13 @@ button {
   .hero-actions button,
   .table-buttons button {
     width: 100%;
+  }
+
+  .history-tooltip {
+    top: 44px;
+    right: 8px;
+    width: min(210px, calc(100% - 16px));
+    max-height: 124px;
+    padding: 9px;
   }
 }
