@@ -950,7 +950,7 @@
         }
       }
       return null;
-    }
+    },
 
     chooseRevealIndex(player) {
       for (let column = 0; column < CARD_COLUMNS; column += 1) {
