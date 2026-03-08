@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Skygrô Royale</title>
+    <meta name="theme-color" content="#0a1025" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta
+      name="description"
+      content="Mini jeu de cartes Skyjo-like premium arcade, jouable directement dans le navigateur."
+    />
+    <link rel="icon" href="./assets/icons/icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="stylesheet" href="./style.css" />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/GLTFLoader.js"
+    ></script>
+    <script defer src="./main.js"></script>
+  </head>
+  <body>
+    <div class="backdrop">
+      <div class="bg-orb orb-a"></div>
+      <div class="bg-orb orb-b"></div>
+      <div class="bg-orb orb-c"></div>
+      <div class="grid-shimmer"></div>
+    </div>
+
+    <div class="app-shell">
+      <header class="chrome-bar">
+        <div class="brand-mark">
+          <span class="brand-chip">Arcade Royale</span>
+          <h1>Skygrô</h1>
+        </div>
+        <div class="chrome-actions">
+          <button id="openRulesTop" class="glass-btn small-btn">Règles</button>
+          <button id="openOptionsTop" class="glass-btn small-btn">Options</button>
+          <button id="muteToggle" class="glass-btn small-btn">Son activé</button>
+        </div>
+      </header>
+
+      <main class="main-stage">
+        <section id="landingScreen" class="screen landing-screen">
+          <div class="hero-panel">
+            <div class="hero-copy">
+              <p class="eyebrow">Skyjo-like premium casino cartoon</p>
+              <h2>12 cartes. 4 joueurs. Une manche qui bascule vite.</h2>
+              <p class="hero-text">
+                Révèle, remplace, défausse et manipule ton tableau avant les IA.
+                Cartes glossy, table néon, avatars réactifs, HUD lisible et
+                manches relançables en un clic.
+              </p>
+              <div class="hero-actions">
+                <button id="playButton" class="primary-btn">Jouer</button>
+                <button id="openRules" class="glass-btn">Voir les règles</button>
+                <button id="openOptions" class="glass-btn">Options</button>
+              </div>
+              <div class="feature-row">
+                <div class="feature-pill">3 IA réactives</div>
+                <div class="feature-pill">Scène 3D légère</div>
+                <div class="feature-pill">Mobile paysage prêt</div>
+                <div class="feature-pill">Tutoriel intégré</div>
+              </div>
+            </div>
+
+            <div class="hero-preview">
+              <div class="preview-table">
+                <div class="preview-card preview-card-a">-2</div>
+                <div class="preview-card preview-card-b">5</div>
+                <div class="preview-card preview-card-c">11</div>
+                <div class="preview-glow"></div>
+              </div>
+              <div class="preview-badges">
+                <span>Balayage glossy</span>
+                <span>Flip 3D</span>
+                <span>Réactions fun</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="gameScreen" class="screen game-screen is-hidden">
+          <div class="hud-panel">
+            <div class="hud-group">
+              <span class="hud-label">Manche</span>
+              <strong id="roundIndicator">1</strong>
+            </div>
+            <div class="hud-group wide">
+              <span class="hud-label">Tour</span>
+              <strong id="turnIndicator">Préparation</strong>
+            </div>
+            <div class="hud-group wide">
+              <span class="hud-label">État</span>
+              <strong id="phaseIndicator">Distribution en cours</strong>
+            </div>
+            <div class="hud-group action-group">
+              <button id="newRoundBtn" class="glass-btn hud-btn">Nouvelle manche</button>
+              <button id="newGameBtn" class="glass-btn hud-btn">Nouvelle partie</button>
+            </div>
+          </div>
+
+          <div id="scoreStrip" class="score-strip"></div>
+
+          <div class="table-layout">
+            <section class="seat seat-top" data-player-index="1">
+              <div class="seat-head">
+                <div>
+                  <h3 id="name-1">Nova</h3>
+                  <p id="score-1">Score visible 0</p>
+                </div>
+                <span class="seat-badge">IA</span>
+              </div>
+              <div id="board-1" class="board-grid compact-grid"></div>
+            </section>
+
+            <section class="seat seat-left" data-player-index="2">
+              <div class="seat-head">
+                <div>
+                  <h3 id="name-2">Pixel</h3>
+                  <p id="score-2">Score visible 0</p>
+                </div>
+                <span class="seat-badge">IA</span>
+              </div>
+              <div id="board-2" class="board-grid compact-grid"></div>
+            </section>
+
+            <section class="table-center">
+              <div class="scene-card">
+                <div id="avatarScene" class="avatar-scene">
+                  <div id="avatarFallback" class="avatar-fallback is-hidden"></div>
+                  <div id="emotionLayer" class="emotion-layer"></div>
+                </div>
+                <div class="scene-overlay">
+                  <div class="pulse-ring ring-a"></div>
+                  <div class="pulse-ring ring-b"></div>
+                </div>
+              </div>
+
+              <div class="pile-row">
+                <button id="drawPile" class="pile-card" aria-label="Piocher">
+                  <span class="pile-title">Pioche</span>
+                  <span id="drawCount" class="pile-meta">0 cartes</span>
+                  <span class="card-back-face">Skygrô</span>
+                </button>
+
+                <div class="center-actions">
+                  <div id="drawnCardSlot" class="drawn-card-slot">
+                    <div class="drawn-placeholder">Carte en main</div>
+                  </div>
+                  <div class="table-buttons">
+                    <button
+                      id="discardDrawnBtn"
+                      class="glass-btn action-btn"
+                      disabled
+                    >
+                      Défausser / retourner
+                    </button>
+                    <button id="helpBtn" class="glass-btn action-btn">
+                      Tutoriel
+                    </button>
+                  </div>
+                </div>
+
+                <button id="discardPile" class="pile-card discard-slot" aria-label="Prendre la défausse">
+                  <span class="pile-title">Défausse</span>
+                  <span id="discardHint" class="pile-meta">Vide</span>
+                  <span id="discardTop" class="discard-top">--</span>
+                </button>
+              </div>
+
+              <div id="statusBanner" class="status-banner">
+                Distribution en cours...
+              </div>
+
+              <section class="history-card">
+                <div class="history-head">
+                  <h3>Derniers coups</h3>
+                  <span id="historyBadge" class="history-badge">0</span>
+                </div>
+                <ul id="historyList" class="history-list"></ul>
+              </section>
+            </section>
+
+            <section class="seat seat-right" data-player-index="3">
+              <div class="seat-head">
+                <div>
+                  <h3 id="name-3">Goldie</h3>
+                  <p id="score-3">Score visible 0</p>
+                </div>
+                <span class="seat-badge">IA</span>
+              </div>
+              <div id="board-3" class="board-grid compact-grid"></div>
+            </section>
+
+            <section class="seat seat-bottom human-seat" data-player-index="0">
+              <div class="seat-head">
+                <div>
+                  <h3 id="name-0">Vous</h3>
+                  <p id="score-0">Score visible 0</p>
+                </div>
+                <span class="seat-badge human-badge">Humain</span>
+              </div>
+              <div id="board-0" class="board-grid human-grid"></div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="fxLayer" class="fx-layer" aria-hidden="true"></div>
+
+    <div id="modalBackdrop" class="modal-backdrop is-hidden"></div>
+
+    <section id="rulesModal" class="modal-card is-hidden" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <h2>Règles express</h2>
+        <button data-close-modal="rulesModal" class="close-btn">Fermer</button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Chaque joueur possède 12 cartes. Le but est de finir la manche avec
+          le score le plus bas.
+        </p>
+        <ol class="rules-list">
+          <li>Au début, chaque joueur retourne 2 cartes.</li>
+          <li>À ton tour, prends la défausse ou pioche une carte.</li>
+          <li>Si tu gardes la carte, remplace une carte de ton tableau. Sinon, défausse-la puis retourne une carte cachée.</li>
+          <li>Quand 3 cartes identiques d’une colonne sont visibles, la colonne s’efface.</li>
+          <li>Dès qu’un joueur n’a plus de carte cachée, les autres jouent un dernier tour puis on compte les points.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="optionsModal" class="modal-card is-hidden" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <h2>Options</h2>
+        <button data-close-modal="optionsModal" class="close-btn">Fermer</button>
+      </div>
+      <div class="modal-body options-body">
+        <label class="option-row">
+          <span>Difficulté IA</span>
+          <select id="difficultySelect">
+            <option value="1">Relax</option>
+            <option value="2" selected>Standard</option>
+            <option value="3">Tendue</option>
+          </select>
+        </label>
+        <label class="option-row toggle-row">
+          <span>Mode fun</span>
+          <input id="funModeToggle" type="checkbox" checked />
+        </label>
+        <label class="option-row toggle-row">
+          <span>Son</span>
+          <input id="soundToggle" type="checkbox" checked />
+        </label>
+      </div>
+    </section>
+
+    <section id="tutorialModal" class="modal-card tutorial-modal is-hidden" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <h2>Tutoriel</h2>
+        <button data-close-modal="tutorialModal" class="close-btn">Fermer</button>
+      </div>
+      <div class="modal-body">
+        <p id="tutorialText">
+          Clique sur deux cartes de ton tableau pour lancer la manche.
+        </p>
+        <div class="tutorial-actions">
+          <button id="tutorialNextBtn" class="primary-btn">Suivant</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="roundModal" class="modal-card results-modal is-hidden" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <h2>Fin de manche</h2>
+        <button data-close-modal="roundModal" class="close-btn">Fermer</button>
+      </div>
+      <div class="modal-body">
+        <div id="roundWinner" class="winner-banner">Classement</div>
+        <div id="roundResults" class="results-list"></div>
+        <div class="result-actions">
+          <button id="playAgainBtn" class="primary-btn">Rejouer</button>
+          <button id="backToMenuBtn" class="glass-btn">Menu</button>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "Skygro Royale",
+  "short_name": "Skygro",
+  "description": "Jeu de cartes web Skyjo-like premium, responsive et jouable sur mobile.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a1025",
+  "theme_color": "#0a1025",
+  "icons": [
+    {
+      "src": "./assets/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

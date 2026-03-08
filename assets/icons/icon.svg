@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#28d4ff"/>
+      <stop offset="48%" stop-color="#684fff"/>
+      <stop offset="100%" stop-color="#ff6cb3"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#dce7ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="#0a1025"/>
+  <circle cx="256" cy="256" r="198" fill="url(#bg)" opacity=".16"/>
+  <g transform="translate(105 86) rotate(-9 151 170)">
+    <rect x="34" y="54" width="196" height="280" rx="28" fill="#1d2d67" opacity=".65"/>
+    <rect x="94" y="22" width="196" height="280" rx="28" fill="url(#card)"/>
+    <rect x="94" y="22" width="196" height="280" rx="28" fill="none" stroke="#ffffff" stroke-opacity=".4"/>
+    <text x="192" y="179" font-family="Arial Black, Arial, sans-serif" font-size="120" text-anchor="middle" fill="#ff5b86">9</text>
+    <text x="122" y="70" font-family="Arial Black, Arial, sans-serif" font-size="34" fill="#1c2f66">SG</text>
+  </g>
+</svg>
